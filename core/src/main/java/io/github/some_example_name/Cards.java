@@ -10,7 +10,7 @@ public class Cards {
         this.suit = suit;
     }
 
-    public String getRank(String fileName) {
+    public static String getRank(String fileName) {
         int underscoreIndex = fileName.indexOf("_");
         String rank = fileName.substring(0, underscoreIndex);
         return rank;

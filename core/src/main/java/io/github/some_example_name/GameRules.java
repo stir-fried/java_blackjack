@@ -1,64 +1,34 @@
 package io.github.some_example_name;
 
 public class GameRules {
-    private int playerScore;
-    private int dealerScore;
-    private int playerWins;
-    private int dealerWins;
-    private int draw;
+    private static int playerScore;
 
     public GameRules() {
-        this.playerScore = 0;
-        this.dealerScore = 0;
-        this.playerWins = 0;
-        this.dealerWins = 0;
-        this.draw = 0;
+        playerScore = 0;
     }
 
-    public void updateScores(int playerCardValue, int dealerCardValue)
+    public static String winCondition(int playerScore, int dealerScore)
     {
-        playerScore += playerCardValue;
-        dealerScore += dealerCardValue;
 
-        if (playerScore == 21) {
-            playerWins++;
-        } else if (dealerScore == 21) {
-            dealerWins++;
-        } else if (playerScore > 21) {
-            dealerWins++;
+        if (playerScore > 21) {
+            return "Dealer Wins";
         } else if (dealerScore > 21) {
-            playerWins++;
-        } else if (playerScore == dealerScore) {
-            draw++;
+            return "Player Wins";
+        } else if (playerScore == 21) {
+            return "Player Wins";
+        } else if (dealerScore == 21) {
+            return "Dealer Wins";
+        } else if (playerScore > dealerScore) {
+            return "Player Wins";
+        } else if (dealerScore > playerScore) {
+            return "Dealer Wins";
+        } else {
+            return "Draw";
         }
     }
 
-    public int getPlayerScore() {
-        return playerScore;
-    }
 
-    public int getDealerScore() {
-        return dealerScore;
-    }
-
-    public int getPlayerWins() {
-        return playerWins;
-    }
-
-    public int getDealerWins() {
-        return dealerWins;
-    }
-
-    public int getDraw() {
-        return draw;
-    }
-
-    public void resetScores() {
-        playerScore = 0;
-        dealerScore = 0;
-    }
-
-    public int getCardValue(String rank) {
+    public static int getCardValue(String rank) {
         switch (rank) {
             case "2":
                 return 2;
