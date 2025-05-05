@@ -10,13 +10,12 @@ public class Cards {
         this.suit = suit;
     }
 
-    public String getRank() {
+    public String getRank(String fileName) {
+        int underscoreIndex = fileName.indexOf("_");
+        String rank = fileName.substring(0, underscoreIndex);
         return rank;
     }
 
-    public String getSuit() {
-        return suit;
-    }
     public String getAssetFileName() {
         return rank + "_" + suit + ".png";
     }

@@ -10,7 +10,8 @@ public class Deck {
     public Deck() {
         cards = new ArrayList<>();
         String[] suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
-        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10",
+            "Jack", "Queen", "King", "Ace"};
 
         for (String suit : suits) {
             for (String rank : ranks) {
@@ -27,15 +28,11 @@ public class Deck {
         if (!cards.isEmpty()) {
             return cards.remove(cards.size() - 1);
         }
-        return null; // No cards left
+        return null;
     }
 
     public List<Cards> getCards() {
         return cards;
-    }
-
-    public int size() {
-        return cards.size();
     }
 
     @Override

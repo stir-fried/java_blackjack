@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.*;
+import javax.swing.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +28,10 @@ public class Main implements ApplicationListener {
     private ArrayList<Sprite> playerCards;
     private ArrayList<Sprite> dealerCards;
     private Deck deck;
+    private Boolean gameOver;
 
-    public void dealCards()
+    public void dealPlayer()
     {
-
-        assert deck != null;
-        if (deck.getCards().size() < 2) return;
-
 
         Cards playerCard = deck.dealCard();
          if (playerCard != null) {
@@ -41,15 +39,21 @@ public class Main implements ApplicationListener {
              Texture cardTexture = new Texture(fileName);
              Sprite cardSprite = new Sprite(cardTexture);
              playerCards.add(cardSprite);
+             System.out.println("Player card value: " + playerCard);
          }
+    }
 
-         Cards dealerCard = deck.dealCard();
+    public void dealDealer(){
+
+        Cards dealerCard = deck.dealCard();
          if (dealerCard != null) {
              String fileName = dealerCard.getAssetFileName();
              Texture cardTexture = new Texture(fileName);
              Sprite cardSprite = new Sprite(cardTexture);
              dealerCards.add(cardSprite);
+             System.out.println("dealer card value: " + dealerCard);
          }
+
     }
 
 
@@ -67,19 +71,14 @@ public class Main implements ApplicationListener {
         deck = new Deck();
         playerCards = new ArrayList<>();
         dealerCards = new ArrayList<>();
+        gameOver = false;
 
         deck.shuffle();
-        dealCards();
+        dealPlayer();
+        dealDealer();
+        dealPlayer();
+        dealDealer();
 
-
-
-
-        Cards card = deck.dealCard();
-        if (card != null) {
-            String fileName = card.getAssetFileName();
-            Texture cardTexture = new Texture(fileName);
-            System.out.println("Loaded texture for: " + card);
-        }
 
     }
 
@@ -110,11 +109,22 @@ public class Main implements ApplicationListener {
 
         x = 200;
         y = 350;
-        for (Sprite card : dealerCards) {
+        for (int i = 0; i < dealerCards.size(); i++) {
+        Sprite card = dealerCards.get(i);
+        if (i == 1 && !gameOver) {
+
+            Texture hiddenTexture = new Texture("hidden_card.png");
+            Sprite hiddenCard = new Sprite(hiddenTexture);
+            hiddenCard.setPosition(x, y);
+            hiddenCard.setSize(163, 232);
+            hiddenCard.draw(spriteBatch);
+        } else {
+
             card.setPosition(x, y);
+            card.setSize(163, 232);
             card.draw(spriteBatch);
-            card.setSize(163,232);
-            x += 81;
+        }
+        x += 81;
         }
 
 
