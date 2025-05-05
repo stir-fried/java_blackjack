@@ -9,10 +9,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
+ */
 public class Main implements ApplicationListener {
 
     private Texture background;
@@ -21,8 +24,33 @@ public class Main implements ApplicationListener {
     private Texture cardTexture;
     private List<Sprite> cardSprites;
     private OrthographicCamera camera;
+    private ArrayList<Sprite> playerCards;
+    private ArrayList<Sprite> dealerCards;
+    private Deck deck;
+
+    public void dealCards()
+    {
+
+        assert deck != null;
+        if (deck.getCards().size() < 2) return;
 
 
+        Cards playerCard = deck.dealCard();
+         if (playerCard != null) {
+             String fileName = playerCard.getAssetFileName();
+             Texture cardTexture = new Texture(fileName);
+             Sprite cardSprite = new Sprite(cardTexture);
+             playerCards.add(cardSprite);
+         }
+
+         Cards dealerCard = deck.dealCard();
+         if (dealerCard != null) {
+             String fileName = dealerCard.getAssetFileName();
+             Texture cardTexture = new Texture(fileName);
+             Sprite cardSprite = new Sprite(cardTexture);
+             dealerCards.add(cardSprite);
+         }
+    }
 
 
     @Override
@@ -36,30 +64,27 @@ public class Main implements ApplicationListener {
         camera.update();
         spriteBatch = new SpriteBatch();
         cardSprites = new ArrayList<>();
-        Deck deck = new Deck();
+        deck = new Deck();
+        playerCards = new ArrayList<>();
+        dealerCards = new ArrayList<>();
+
+        deck.shuffle();
+        dealCards();
 
 
-        /*deck.shuffle();
 
-        for (Cards card : deck.getCards()) {
-            String fileName = card.getAssetFileName();
-            Texture cardTexture = new Texture(fileName);
-            Sprite cardSprite = new Sprite(cardTexture);
-            cardSprites.add(cardSprite);
-        }*/
 
         Cards card = deck.dealCard();
         if (card != null) {
-        String fileName = card.getAssetFileName();
-        Texture cardTexture = new Texture(fileName);
-        System.out.println("Loaded texture for: " + card);
-    }
+            String fileName = card.getAssetFileName();
+            Texture cardTexture = new Texture(fileName);
+            System.out.println("Loaded texture for: " + card);
+        }
 
     }
 
     @Override
     public void resize(int width, int height) {
-        // Resize your application here. The parameters represent the new window size.
         viewport.update(width, height);
         camera.position.set(camera.viewportWidth / 2,
             camera.viewportHeight / 2, 0);
@@ -68,21 +93,30 @@ public class Main implements ApplicationListener {
 
     @Override
     public void render() {
-        // Draw your application here
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
         spriteBatch.draw(background, 0, 0, 914, 610);
 
-        // Draw all card sprites
-        float x = 0, y = 0; // Starting position
-        for (Sprite cardSprite : cardSprites) {
-            cardSprite.setPosition(x, y);
-            cardSprite.setSize(100, 150); // Set size for each card
-            cardSprite.draw(spriteBatch);
-            x += 110; // Adjust spacing between cards
+
+        float x = 200, y = 50;
+        for (Sprite card : playerCards) {
+            card.setPosition(x, y);
+            card.draw(spriteBatch);
+            card.setSize(163,232);
+            x += 81;
         }
+
+        x = 200;
+        y = 350;
+        for (Sprite card : dealerCards) {
+            card.setPosition(x, y);
+            card.draw(spriteBatch);
+            card.setSize(163,232);
+            x += 81;
+        }
+
 
         spriteBatch.end();
     }
@@ -100,5 +134,9 @@ public class Main implements ApplicationListener {
     @Override
     public void dispose() {
         // Destroy application's resources here.
+    }
+
+    public void move(){
+
     }
 }
